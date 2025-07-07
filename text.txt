@@ -1,0 +1,237 @@
+DROP TABLE IF EXISTS 
+    bookings,
+    cities,
+    movies,
+    reviews,
+    shows,
+    states,
+    theatres,
+    tickets,
+    transactions,
+    users
+CASCADE;
+
+
+
+// Movies
+
+curl -X POST http://localhost:8080/movies \
+-H "Content-Type: application/json" \
+-d '{
+  "movie_name": "Dangal",
+  "movie_description": "Biographical sports drama about a wrestler and his daughters",
+  "duration": 161,
+  "language": "Hindi",
+  "genre": "Drama",
+  "poster_url": "https://example.com/dangal.jpg",
+  "rating": 8.4
+}'
+
+curl -X POST http://localhost:8080/movies \
+-H "Content-Type: application/json" \
+-d '{
+  "movie_name": "3 Idiots",
+  "movie_description": "A comedy-drama exploring the Indian education system",
+  "duration": 170,
+  "language": "Hindi",
+  "genre": "Comedy-Drama",
+  "poster_url": "https://example.com/3idiots.jpg",
+  "rating": 8.4
+}'
+
+curl -X POST http://localhost:8080/movies \
+-H "Content-Type: application/json" \
+-d '{
+  "movie_name": "Zindagi Na Milegi Dobara",
+  "movie_description": "Three friends rediscover life on a road trip in Spain",
+  "duration": 155,
+  "language": "Hindi",
+  "genre": "Adventure/Drama",
+  "poster_url": "https://example.com/znmd.jpg",
+  "rating": 8.2
+}'
+
+curl -X POST http://localhost:8080/movies \
+-H "Content-Type: application/json" \
+-d '{
+  "movie_name": "Gully Boy",
+  "movie_description": "A coming-of-age story about a street rapper from Mumbai",
+  "duration": 154,
+  "language": "Hindi",
+  "genre": "Musical/Drama",
+  "poster_url": "https://example.com/gullyboy.jpg",
+  "rating": 8.0
+}'
+
+curl -X POST http://localhost:8080/movies \
+-H "Content-Type: application/json" \
+-d '{
+  "movie_name": "Shershaah",
+  "movie_description": "Biographical war film based on the life of Captain Vikram Batra",
+  "duration": 135,
+  "language": "Hindi",
+  "genre": "War/Biography",
+  "poster_url": "https://example.com/shershaah.jpg",
+  "rating": 7.9
+}'
+
+
+
+// Theatres
+
+curl -X POST http://localhost:8080/theatres \
+-H "Content-Type: application/json" \
+-d '{
+  "theatre_name": "PVR Icon",
+  "theatre_location": "Saket",
+  "city_id": 2,
+  "total_seats": 300,
+  "theatre_timing": "09:00 AM - 12:00 AM"
+}'
+
+curl -X POST http://localhost:8080/theatres \
+-H "Content-Type: application/json" \
+-d '{
+  "theatre_name": "INOX Insignia",
+  "theatre_location": "Andheri West",
+  "city_id": 3,
+  "total_seats": 220,
+  "theatre_timing": "10:00 AM - 11:30 PM"
+}'
+
+curl -X POST http://localhost:8080/theatres \
+-H "Content-Type: application/json" \
+-d '{
+  "theatre_name": "Cinepolis",
+  "theatre_location": "Banjara Hills",
+  "city_id": 4,
+  "total_seats": 280,
+  "theatre_timing": "08:30 AM - 11:00 PM"
+}'
+
+curl -X POST http://localhost:8080/theatres \
+-H "Content-Type: application/json" \
+-d '{
+  "theatre_name": "Miraj Cinemas",
+  "theatre_location": "Connaught Place",
+  "city_id": 5,
+  "total_seats": 200,
+  "theatre_timing": "10:00 AM - 10:30 PM"
+}'
+
+curl -X POST http://localhost:8080/theatres \
+-H "Content-Type: application/json" \
+-d '{
+  "theatre_name": "Carnival Cinemas",
+  "theatre_location": "Salt Lake",
+  "city_id": 6,
+  "total_seats": 240,
+  "theatre_timing": "09:30 AM - 11:00 PM"
+}'
+
+
+
+// Shows
+
+curl -X POST http://localhost:8080/shows \
+-H "Content-Type: application/json" \
+-d '{
+  "movie_id": 1,
+  "theatre_id": 1,
+  "show_time": "2025-07-07T19:00:00Z",
+  "total_seats": 100,
+  "price": 12.50,
+  "show_duration": 150
+}'
+
+curl -X POST http://localhost:8080/shows \
+-H "Content-Type: application/json" \
+-d '{
+  "movie_id": 2,
+  "theatre_id": 2,
+  "show_time": "2025-07-07T21:30:00Z",
+  "total_seats": 120,
+  "price": 10.00,
+  "show_duration": 145
+}'
+
+curl -X POST http://localhost:8080/shows \
+-H "Content-Type: application/json" \
+-d '{
+  "movie_id": 3,
+  "theatre_id": 3,
+  "show_time": "2025-07-08T14:00:00Z",
+  "total_seats": 90,
+  "price": 8.75,
+  "show_duration": 160
+}'
+
+curl -X POST http://localhost:8080/shows \
+-H "Content-Type: application/json" \
+-d '{
+  "movie_id": 4,
+  "theatre_id": 4,
+  "show_time": "2025-07-08T17:45:00Z",
+  "total_seats": 110,
+  "price": 11.00,
+  "show_duration": 155
+}'
+
+curl -X POST http://localhost:8080/shows \
+-H "Content-Type: application/json" \
+-d '{
+  "movie_id": 5,
+  "theatre_id": 5,
+  "show_time": "2025-07-09T20:15:00Z",
+  "total_seats": 95,
+  "price": 9.50,
+  "show_duration": 140
+}'
+
+
+
+// States
+
+curl -X POST http://localhost:8080/states \
+  -H "Content-Type: application/json" \
+  -d '{"state_name": "Maharashtra"}'
+
+curl -X POST http://localhost:8080/states \
+  -H "Content-Type: application/json" \
+  -d '{"state_name": "Karnataka"}'
+
+curl -X POST http://localhost:8080/states \
+  -H "Content-Type: application/json" \
+  -d '{"state_name": "Tamil Nadu"}'
+
+curl -X POST http://localhost:8080/states \
+  -H "Content-Type: application/json" \
+  -d '{"state_name": "Uttar Pradesh"}'
+
+curl -X POST http://localhost:8080/states \
+  -H "Content-Type: application/json" \
+  -d '{"state_name": "West Bengal"}'
+
+
+
+// Cities
+
+curl -X POST http://localhost:8080/cities \
+  -H "Content-Type: application/json" \
+  -d '{"state_id": 1, "city_name": "Mumbai"}'
+
+curl -X POST http://localhost:8080/cities \
+  -H "Content-Type: application/json" \
+  -d '{"state_id": 2, "city_name": "Bengaluru"}'
+
+curl -X POST http://localhost:8080/cities \
+  -H "Content-Type: application/json" \
+  -d '{"state_id": 3, "city_name": "Chennai"}'
+
+curl -X POST http://localhost:8080/cities \
+  -H "Content-Type: application/json" \
+  -d '{"state_id": 4, "city_name": "Lucknow"}'
+
+curl -X POST http://localhost:8080/cities \
+  -H "Content-Type: application/json" \
+  -d '{"state_id": 5, "city_name": "Kolkata"}'
