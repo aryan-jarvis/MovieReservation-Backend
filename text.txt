@@ -12,184 +12,6 @@ DROP TABLE IF EXISTS
 CASCADE;
 
 
-
-// Movies
-
-curl -X POST http://localhost:8080/movies \
--H "Content-Type: application/json" \
--d '{
-  "movie_name": "Dangal",
-  "movie_description": "Biographical sports drama about a wrestler and his daughters",
-  "duration": 161,
-  "language": "Hindi",
-  "genre": "Drama",
-  "poster_url": "https://example.com/dangal.jpg",
-  "rating": 8.4
-}'
-
-curl -X POST http://localhost:8080/movies \
--H "Content-Type: application/json" \
--d '{
-  "movie_name": "3 Idiots",
-  "movie_description": "A comedy-drama exploring the Indian education system",
-  "duration": 170,
-  "language": "Hindi",
-  "genre": "Comedy-Drama",
-  "poster_url": "https://example.com/3idiots.jpg",
-  "rating": 8.4
-}'
-
-curl -X POST http://localhost:8080/movies \
--H "Content-Type: application/json" \
--d '{
-  "movie_name": "Zindagi Na Milegi Dobara",
-  "movie_description": "Three friends rediscover life on a road trip in Spain",
-  "duration": 155,
-  "language": "Hindi",
-  "genre": "Adventure/Drama",
-  "poster_url": "https://example.com/znmd.jpg",
-  "rating": 8.2
-}'
-
-curl -X POST http://localhost:8080/movies \
--H "Content-Type: application/json" \
--d '{
-  "movie_name": "Gully Boy",
-  "movie_description": "A coming-of-age story about a street rapper from Mumbai",
-  "duration": 154,
-  "language": "Hindi",
-  "genre": "Musical/Drama",
-  "poster_url": "https://example.com/gullyboy.jpg",
-  "rating": 8.0
-}'
-
-curl -X POST http://localhost:8080/movies \
--H "Content-Type: application/json" \
--d '{
-  "movie_name": "Shershaah",
-  "movie_description": "Biographical war film based on the life of Captain Vikram Batra",
-  "duration": 135,
-  "language": "Hindi",
-  "genre": "War/Biography",
-  "poster_url": "https://example.com/shershaah.jpg",
-  "rating": 7.9
-}'
-
-
-
-// Theatres
-
-curl -X POST http://localhost:8080/theatres \
--H "Content-Type: application/json" \
--d '{
-  "theatre_name": "PVR Icon",
-  "theatre_location": "Saket",
-  "city_id": 2,
-  "total_seats": 300,
-  "theatre_timing": "09:00 AM - 12:00 AM"
-}'
-
-curl -X POST http://localhost:8080/theatres \
--H "Content-Type: application/json" \
--d '{
-  "theatre_name": "INOX Insignia",
-  "theatre_location": "Andheri West",
-  "city_id": 3,
-  "total_seats": 220,
-  "theatre_timing": "10:00 AM - 11:30 PM"
-}'
-
-curl -X POST http://localhost:8080/theatres \
--H "Content-Type: application/json" \
--d '{
-  "theatre_name": "Cinepolis",
-  "theatre_location": "Banjara Hills",
-  "city_id": 4,
-  "total_seats": 280,
-  "theatre_timing": "08:30 AM - 11:00 PM"
-}'
-
-curl -X POST http://localhost:8080/theatres \
--H "Content-Type: application/json" \
--d '{
-  "theatre_name": "Miraj Cinemas",
-  "theatre_location": "Connaught Place",
-  "city_id": 5,
-  "total_seats": 200,
-  "theatre_timing": "10:00 AM - 10:30 PM"
-}'
-
-curl -X POST http://localhost:8080/theatres \
--H "Content-Type: application/json" \
--d '{
-  "theatre_name": "Carnival Cinemas",
-  "theatre_location": "Salt Lake",
-  "city_id": 6,
-  "total_seats": 240,
-  "theatre_timing": "09:30 AM - 11:00 PM"
-}'
-
-
-
-// Shows
-
-curl -X POST http://localhost:8080/shows \
--H "Content-Type: application/json" \
--d '{
-  "movie_id": 1,
-  "theatre_id": 1,
-  "show_time": "2025-07-07T19:00:00Z",
-  "total_seats": 100,
-  "price": 12.50,
-  "show_duration": 150
-}'
-
-curl -X POST http://localhost:8080/shows \
--H "Content-Type: application/json" \
--d '{
-  "movie_id": 2,
-  "theatre_id": 2,
-  "show_time": "2025-07-07T21:30:00Z",
-  "total_seats": 120,
-  "price": 10.00,
-  "show_duration": 145
-}'
-
-curl -X POST http://localhost:8080/shows \
--H "Content-Type: application/json" \
--d '{
-  "movie_id": 3,
-  "theatre_id": 3,
-  "show_time": "2025-07-08T14:00:00Z",
-  "total_seats": 90,
-  "price": 8.75,
-  "show_duration": 160
-}'
-
-curl -X POST http://localhost:8080/shows \
--H "Content-Type: application/json" \
--d '{
-  "movie_id": 4,
-  "theatre_id": 4,
-  "show_time": "2025-07-08T17:45:00Z",
-  "total_seats": 110,
-  "price": 11.00,
-  "show_duration": 155
-}'
-
-curl -X POST http://localhost:8080/shows \
--H "Content-Type: application/json" \
--d '{
-  "movie_id": 5,
-  "theatre_id": 5,
-  "show_time": "2025-07-09T20:15:00Z",
-  "total_seats": 95,
-  "price": 9.50,
-  "show_duration": 140
-}'
-
-
-
 // States
 
 curl -X POST http://localhost:8080/states \
@@ -212,26 +34,357 @@ curl -X POST http://localhost:8080/states \
   -H "Content-Type: application/json" \
   -d '{"state_name": "West Bengal"}'
 
+curl -X POST http://localhost:8080/states \
+  -H "Content-Type: application/json" \
+  -d '{"state_name": "Gujarat"}'
+
+curl -X POST http://localhost:8080/states \
+  -H "Content-Type: application/json" \
+  -d '{"state_name": "Rajasthan"}'
+
+curl -X POST http://localhost:8080/states \
+  -H "Content-Type: application/json" \
+  -d '{"state_name": "Madhya Pradesh"}'
+
+curl -X POST http://localhost:8080/states \
+  -H "Content-Type: application/json" \
+  -d '{"state_name": "Bihar"}'
+
+curl -X POST http://localhost:8080/states \
+  -H "Content-Type: application/json" \
+  -d '{"state_name": "Punjab"}'
+
 
 
 // Cities
 
-curl -X POST http://localhost:8080/cities \
-  -H "Content-Type: application/json" \
-  -d '{"state_id": 1, "city_name": "Mumbai"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 1, "city_name": "Mumbai"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 1, "city_name": "Pune"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 1, "city_name": "Nagpur"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 1, "city_name": "Nashik"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 1, "city_name": "Thane"}'
 
-curl -X POST http://localhost:8080/cities \
-  -H "Content-Type: application/json" \
-  -d '{"state_id": 2, "city_name": "Bengaluru"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 2, "city_name": "Bangalore"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 2, "city_name": "Mysore"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 2, "city_name": "Hubli"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 2, "city_name": "Mangalore"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 2, "city_name": "Belagavi"}'
 
-curl -X POST http://localhost:8080/cities \
-  -H "Content-Type: application/json" \
-  -d '{"state_id": 3, "city_name": "Chennai"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 3, "city_name": "Chennai"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 3, "city_name": "Coimbatore"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 3, "city_name": "Madurai"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 3, "city_name": "Salem"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 3, "city_name": "Tiruchirappalli"}'
 
-curl -X POST http://localhost:8080/cities \
-  -H "Content-Type: application/json" \
-  -d '{"state_id": 4, "city_name": "Lucknow"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 4, "city_name": "Lucknow"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 4, "city_name": "Kanpur"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 4, "city_name": "Agra"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 4, "city_name": "Varanasi"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 4, "city_name": "Allahabad"}'
 
-curl -X POST http://localhost:8080/cities \
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 5, "city_name": "Kolkata"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 5, "city_name": "Siliguri"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 5, "city_name": "Durgapur"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 5, "city_name": "Asansol"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 5, "city_name": "Howrah"}'
+
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 6, "city_name": "Ahmedabad"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 6, "city_name": "Surat"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 6, "city_name": "Vadodara"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 6, "city_name": "Rajkot"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 6, "city_name": "Bhavnagar"}'
+
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 7, "city_name": "Jaipur"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 7, "city_name": "Udaipur"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 7, "city_name": "Jodhpur"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 7, "city_name": "Kota"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 7, "city_name": "Ajmer"}'
+
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 8, "city_name": "Indore"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 8, "city_name": "Bhopal"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 8, "city_name": "Gwalior"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 8, "city_name": "Jabalpur"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 8, "city_name": "Ujjain"}'
+
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 9, "city_name": "Patna"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 9, "city_name": "Gaya"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 9, "city_name": "Bhagalpur"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 9, "city_name": "Muzaffarpur"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 9, "city_name": "Munger"}'
+
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 10, "city_name": "Chandigarh"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 10, "city_name": "Ludhiana"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 10, "city_name": "Amritsar"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 10, "city_name": "Jalandhar"}'
+curl -X POST http://localhost:8080/cities -H "Content-Type: application/json" -d '{"state_id": 10, "city_name": "Patiala"}'
+
+
+
+
+
+Theatres
+
+curl -X POST "http://localhost:8080/theatres" \
   -H "Content-Type: application/json" \
-  -d '{"state_id": 5, "city_name": "Kolkata"}'
+  -d '{
+    "theatre_name": "PVR Icon",
+    "theatre_location": "Andheri West, Mumbai",
+    "city_id": 1,
+    "total_seats": 100,
+    "theatre_image": "https://example.com/images/pvr_icon.jpg",
+    "theatre_status": "Active"
+  }'
+
+curl -X POST "http://localhost:8080/theatres" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "theatre_name": "INOX Forum",
+    "theatre_location": "Elgin Road, Kolkata",
+    "city_id": 2,
+    "total_seats": 100,
+    "theatre_image": "https://example.com/images/inox_forum.jpg",
+    "theatre_status": "Inactive"
+  }'
+
+curl -X POST "http://localhost:8080/theatres" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "theatre_name": "Sathyam Cinemas",
+    "theatre_location": "Royapettah, Chennai",
+    "city_id": 3,
+    "total_seats": 100,
+    "theatre_image": "https://example.com/images/sathyam.jpg",
+    "theatre_status": "Active"
+  }'
+
+curl -X POST "http://localhost:8080/theatres" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "theatre_name": "Carnival Cinemas",
+    "theatre_location": "MG Road, Kochi",
+    "city_id": 4,
+    "total_seats": 100,
+    "theatre_image": "https://example.com/images/carnival.jpg",
+    "theatre_status": "Inactive"
+  }'
+
+curl -X POST "http://localhost:8080/theatres" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "theatre_name": "Raj Mandir",
+    "theatre_location": "MI Road, Jaipur",
+    "city_id": 5,
+    "total_seats": 100,
+    "theatre_image": "https://example.com/images/rajmandir.jpg",
+    "theatre_status": "Active"
+  }'
+
+curl -X POST "http://localhost:8080/theatres" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "theatre_name": "Prasads IMAX",
+    "theatre_location": "Necklace Road, Hyderabad",
+    "city_id": 6,
+    "total_seats": 100,
+    "theatre_image": "https://example.com/images/prasads.jpg",
+    "theatre_status": "Inactive"
+  }'
+
+curl -X POST "http://localhost:8080/theatres" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "theatre_name": "PVR Orion",
+    "theatre_location": "Rajajinagar, Bangalore",
+    "city_id": 7,
+    "total_seats": 100,
+    "theatre_image": "https://example.com/images/pvr_orion.jpg",
+    "theatre_status": "Active"
+  }'
+
+curl -X POST "http://localhost:8080/theatres" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "theatre_name": "E-Square",
+    "theatre_location": "University Road, Pune",
+    "city_id": 8,
+    "total_seats": 100,
+    "theatre_image": "https://example.com/images/e_square.jpg",
+    "theatre_status": "Inactive"
+  }'
+
+curl -X POST "http://localhost:8080/theatres" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "theatre_name": "PVR Ambience",
+    "theatre_location": "Ambience Mall, Gurgaon",
+    "city_id": 9,
+    "total_seats": 100,
+    "theatre_image": "https://example.com/images/pvr_ambience.jpg",
+    "theatre_status": "Active"
+  }'
+
+curl -X POST "http://localhost:8080/theatres" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "theatre_name": "Alankar Theatre",
+    "theatre_location": "Ashok Nagar, Bhubaneswar",
+    "city_id": 10,
+    "total_seats": 100,
+    "theatre_image": "https://example.com/images/alankar.jpg",
+    "theatre_status": "Inactive"
+  }'
+
+
+
+
+Movies
+
+curl -X POST "http://localhost:8080/movies" \
+  -H "Content-Type: application/json" \
+  -d "{
+    \"movie_name\": \"3 Idiots\",
+    \"movie_description\": \"Three friends discover the joy of learning and the meaning of success.\",
+    \"duration\": \"171\",
+    \"languages\": [\"Hindi\", \"English\"],
+    \"genre\": \"Comedy\",
+    \"poster_url\": \"https://example.com/posters/3idiots.jpg\",
+    \"rating\": 8.4,
+    \"movie_status\": \"Now Showing\",
+    \"start_date\": { \"day\": 8, \"month\": 7, \"year\": 2025 },
+    \"end_date\": { \"day\": 30, \"month\": 7, \"year\": 2025 }
+  }"
+
+curl -X POST "http://localhost:8080/movies" \
+  -H "Content-Type: application/json" \
+  -d "{
+    \"movie_name\": \"Baahubali: The Beginning\",
+    \"movie_description\": \"A man learns about his heritage and fights for his kingdom.\",
+    \"duration\": \"159\",
+    \"languages\": [\"Telugu\", \"Tamil\", \"Hindi\"],
+    \"genre\": \"Action\",
+    \"poster_url\": \"https://example.com/posters/baahubali1.jpg\",
+    \"rating\": 8.0,
+    \"movie_status\": \"Expired\",
+    \"start_date\": { \"day\": 1, \"month\": 6, \"year\": 2025 },
+    \"end_date\": { \"day\": 30, \"month\": 6, \"year\": 2025 }
+  }"
+
+curl -X POST "http://localhost:8080/movies" \
+  -H "Content-Type: application/json" \
+  -d "{
+    \"movie_name\": \"Super Deluxe\",
+    \"movie_description\": \"An unfaithful wife, an estranged father, and a young boy face unusual situations.\",
+    \"duration\": \"176\",
+    \"languages\": [\"Tamil\"],
+    \"genre\": \"Drama\",
+    \"poster_url\": \"https://example.com/posters/super_deluxe.jpg\",
+    \"rating\": 8.3,
+    \"movie_status\": \"Upcoming\",
+    \"start_date\": { \"day\": 15, \"month\": 7, \"year\": 2025 },
+    \"end_date\": { \"day\": 10, \"month\": 8, \"year\": 2025 }
+  }"
+
+curl -X POST "http://localhost:8080/movies" \
+  -H "Content-Type: application/json" \
+  -d "{
+    \"movie_name\": \"Arjun Reddy\",
+    \"movie_description\": \"A surgeon's life spirals out of control after a failed relationship.\",
+    \"duration\": \"186\",
+    \"languages\": [\"Telugu\"],
+    \"genre\": \"Romance\",
+    \"poster_url\": \"https://example.com/posters/arjun_reddy.jpg\",
+    \"rating\": 8.1,
+    \"movie_status\": \"Now Showing\",
+    \"start_date\": { \"day\": 9, \"month\": 7, \"year\": 2025 },
+    \"end_date\": { \"day\": 1, \"month\": 8, \"year\": 2025 }
+  }"
+
+curl -X POST "http://localhost:8080/movies" \
+  -H "Content-Type: application/json" \
+  -d "{
+    \"movie_name\": \"Kahaani\",
+    \"movie_description\": \"A pregnant woman searches for her missing husband in Kolkata.\",
+    \"duration\": \"122\",
+    \"languages\": [\"Hindi\", \"English\"],
+    \"genre\": \"Thriller\",
+    \"poster_url\": \"https://example.com/posters/kahaani.jpg\",
+    \"rating\": 8.1,
+    \"movie_status\": \"Expired\",
+    \"start_date\": { \"day\": 1, \"month\": 6, \"year\": 2025 },
+    \"end_date\": { \"day\": 30, \"month\": 6, \"year\": 2025 }
+  }"
+
+curl -X POST "http://localhost:8080/movies" \
+  -H "Content-Type: application/json" \
+  -d "{
+    \"movie_name\": \"Master\",
+    \"movie_description\": \"An alcoholic professor is sent to a juvenile school where he clashes with a gangster.\",
+    \"duration\": \"179\",
+    \"languages\": [\"Tamil\", \"Hindi\"],
+    \"genre\": \"Action\",
+    \"poster_url\": \"https://example.com/posters/master.jpg\",
+    \"rating\": 7.8,
+    \"movie_status\": \"Upcoming\",
+    \"start_date\": { \"day\": 20, \"month\": 7, \"year\": 2025 },
+    \"end_date\": { \"day\": 15, \"month\": 8, \"year\": 2025 }
+  }"
+
+curl -X POST "http://localhost:8080/movies" \
+  -H "Content-Type: application/json" \
+  -d "{
+    \"movie_name\": \"Dear Comrade\",
+    \"movie_description\": \"A hot-headed student leader falls in love with a state-level cricketer.\",
+    \"duration\": \"169\",
+    \"languages\": [\"Telugu\", \"Tamil\"],
+    \"genre\": \"Romance\",
+    \"poster_url\": \"https://example.com/posters/dear_comrade.jpg\",
+    \"rating\": 7.4,
+    \"movie_status\": \"Now Showing\",
+    \"start_date\": { \"day\": 8, \"month\": 7, \"year\": 2025 },
+    \"end_date\": { \"day\": 30, \"month\": 7, \"year\": 2025 }
+  }"
+
+curl -X POST "http://localhost:8080/movies" \
+  -H "Content-Type: application/json" \
+  -d "{
+    \"movie_name\": \"Vikram Vedha\",
+    \"movie_description\": \"A police officer sets out to track down a ruthless gangster.\",
+    \"duration\": \"147\",
+    \"languages\": [\"Tamil\", \"Hindi\"],
+    \"genre\": \"Thriller\",
+    \"poster_url\": \"https://example.com/posters/vikram_vedha.jpg\",
+    \"rating\": 8.3,
+    \"movie_status\": \"Upcoming\",
+    \"start_date\": { \"day\": 15, \"month\": 7, \"year\": 2025 },
+    \"end_date\": { \"day\": 10, \"month\": 8, \"year\": 2025 }
+  }"
+
+curl -X POST "http://localhost:8080/movies" \
+  -H "Content-Type: application/json" \
+  -d "{
+    \"movie_name\": \"Drishyam\",
+    \"movie_description\": \"A man does everything he can to protect his family after a crime.\",
+    \"duration\": \"163\",
+    \"languages\": [\"Hindi\", \"English\"],
+    \"genre\": \"Thriller\",
+    \"poster_url\": \"https://example.com/posters/drishyam.jpg\",
+    \"rating\": 8.2,
+    \"movie_status\": \"Expired\",
+    \"start_date\": { \"day\": 1, \"month\": 6, \"year\": 2025 },
+    \"end_date\": { \"day\": 30, \"month\": 6, \"year\": 2025 }
+  }"
+
+curl -X POST "http://localhost:8080/movies" \
+  -H "Content-Type: application/json" \
+  -d "{
+    \"movie_name\": \"Robot\",
+    \"movie_description\": \"A scientist creates an android that develops human emotions.\",
+    \"duration\": \"174\",
+    \"languages\": [\"Tamil\", \"Hindi\", \"Telugu\"],
+    \"genre\": \"Science Fiction\",
+    \"poster_url\": \"https://example.com/posters/robot.jpg\",
+    \"rating\": 7.1,
+    \"movie_status\": \"Now Showing\",
+    \"start_date\": { \"day\": 9, \"month\": 7, \"year\": 2025 },
+    \"end_date\": { \"day\": 1, \"month\": 8, \"year\": 2025 }
+  }"

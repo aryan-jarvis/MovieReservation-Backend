@@ -12,8 +12,7 @@ import (
 )
 
 type CreateReviewInput struct {
-	UserID   int    `json:"user_id" binding:"required"`
-	ShowID   int    `json:"show_id" binding:"required"`
+	MovieID  uint   `json:"movie_id" binding:"required"`
 	Rating   int    `json:"rating" binding:"required,min=1,max=5"`
 	Comments string `json:"comments"`
 }
@@ -30,16 +29,30 @@ func CreateReview(c *gin.Context) {
 		return
 	}
 
+	userIDRaw, exists := c.Get("user_id")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+	userID := userIDRaw.(uint)
+
+	db := c.MustGet("db").(*gorm.DB)
+
+	var existing models.Review
+	if err := db.Where("user_id = ? AND movie_id = ?", userID, input.MovieID).First(&existing).Error; err == nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "You have already reviewed this movie"})
+		return
+	}
+
 	review := models.Review{
-		UserID:    input.UserID,
-		ShowID:    input.ShowID,
+		UserID:    userID,
+		MovieID:   input.MovieID,
 		Rating:    input.Rating,
 		Comments:  input.Comments,
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}
 
-	db := c.MustGet("db").(*gorm.DB)
 	if err := db.Create(&review).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -63,7 +76,7 @@ func GetReviewByID(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 
 	idParam := c.Param("id")
-	id, err := strconv.Atoi(idParam)
+	id, err := strconv.ParseUint(idParam, 10, 64)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid review ID"})
 		return
@@ -86,7 +99,7 @@ func UpdateReview(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 
 	idParam := c.Param("id")
-	id, err := strconv.Atoi(idParam)
+	id, err := strconv.ParseUint(idParam, 10, 64)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid review ID"})
 		return
@@ -124,7 +137,7 @@ func DeleteReview(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 
 	idParam := c.Param("id")
-	id, err := strconv.Atoi(idParam)
+	id, err := strconv.ParseUint(idParam, 10, 64)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid review ID"})
 		return

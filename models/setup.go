@@ -41,6 +41,46 @@ func ConnectDatabase() {
 		log.Fatal("Failed to migrate City:", err)
 	}
 
+	if err := database.AutoMigrate(&Theatre{}); err != nil {
+		log.Fatal("Failed to migrate Theatre:", err)
+	}
+
+	if err := database.AutoMigrate(&Movie{}); err != nil {
+		log.Fatal("Failed to migrate Movie:", err)
+	}
+
+	if err := database.AutoMigrate(&Show{}); err != nil {
+		log.Fatal("Failed to migrate Show:", err)
+	}
+
+	if err := database.AutoMigrate(&User{}); err != nil {
+		log.Fatal("Failed to migrate User:", err)
+	}
+
+	if err := database.AutoMigrate(&Booking{}); err != nil {
+		log.Fatal("Failed to migrate Booking:", err)
+	}
+
+	if err := database.AutoMigrate(&Transaction{}); err != nil {
+		log.Fatal("Failed to migrate Transaction:", err)
+	}
+
+	if err := database.AutoMigrate(&Ticket{}); err != nil {
+		log.Fatal("Failed to migrate Ticket:", err)
+	}
+
+	if err := database.AutoMigrate(&Review{}); err != nil {
+		log.Fatal("Failed to migrate Review:", err)
+	}
+
+	if err := database.AutoMigrate(&SeatBooking{}); err != nil {
+		log.Fatal("Failed to migrate SeatBooking:", err)
+	}
+
+	if err := database.AutoMigrate(&Payment{}); err != nil {
+		log.Fatal("Failed to migrate Payment:", err)
+	}
+
 	err = database.Exec(`
     ALTER TABLE cities DROP CONSTRAINT IF EXISTS fk_states_cities;
     ALTER TABLE cities
@@ -50,20 +90,50 @@ func ConnectDatabase() {
     ON DELETE CASCADE
 `).Error
 	if err != nil {
-		log.Fatal("Failed to add foreign key constraint:", err)
+		log.Fatal("Failed to add foreign key constraint for cities:", err)
 	}
 
-	if err := database.AutoMigrate(
-		&Theatre{},
-		&Movie{},
-		&Show{},
-		&User{},
-		&Booking{},
-		&Transaction{},
-		&Ticket{},
-		&Review{},
-	); err != nil {
-		log.Fatal("Failed to migrate other models:", err)
+	err = database.Exec(`
+    ALTER TABLE shows DROP CONSTRAINT IF EXISTS fk_theatres_shows;
+    ALTER TABLE shows
+    ADD CONSTRAINT fk_theatres_shows
+    FOREIGN KEY (theatre_id)
+    REFERENCES theatres(theatre_id)
+    ON DELETE CASCADE;
+
+    ALTER TABLE shows DROP CONSTRAINT IF EXISTS fk_movies_shows;
+    ALTER TABLE shows
+    ADD CONSTRAINT fk_movies_shows
+    FOREIGN KEY (movie_id)
+    REFERENCES movies(movie_id)
+    ON DELETE CASCADE;
+`).Error
+	if err != nil {
+		log.Fatal("Failed to add foreign key constraints for shows:", err)
+	}
+
+	err = database.Exec(`
+	ALTER TABLE seat_bookings DROP CONSTRAINT IF EXISTS fk_shows_seat_bookings;
+	ALTER TABLE seat_bookings
+	ADD CONSTRAINT fk_shows_seat_bookings
+	FOREIGN KEY (show_id)
+	REFERENCES shows(show_id)
+	ON DELETE CASCADE;
+
+	ALTER TABLE seat_bookings DROP CONSTRAINT IF EXISTS fk_users_seat_bookings;
+	ALTER TABLE seat_bookings
+	ADD CONSTRAINT fk_users_seat_bookings
+	FOREIGN KEY (user_id)
+	REFERENCES users(user_id)
+	ON DELETE CASCADE;
+
+	ALTER TABLE seat_bookings DROP CONSTRAINT IF EXISTS uq_show_seat;
+	ALTER TABLE seat_bookings
+	ADD CONSTRAINT uq_show_seat
+	UNIQUE (show_id, seat);
+`).Error
+	if err != nil {
+		log.Fatal("Failed to add constraints for seat_bookings:", err)
 	}
 
 	DB = database

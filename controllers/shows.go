@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"net/http"
 	"time"
 
@@ -13,33 +14,79 @@ import (
 func CreateShow(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 
-	var show models.Show
-	if err := c.ShouldBindJSON(&show); err != nil {
+	var input struct {
+		MovieID   int      `json:"movie_id" binding:"required"`
+		TheatreID int      `json:"theatre_id" binding:"required"`
+		Date      string   `json:"date" binding:"required"`
+		Languages []string `json:"languages" binding:"required"`
+		Times     []struct {
+			StartTime string `json:"start_time" binding:"required"`
+			EndTime   string `json:"end_time" binding:"required"`
+		} `json:"times" binding:"required"`
+	}
+
+	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	var movie models.Movie
-	if err := db.First(&movie, "movie_id = ?", show.MovieID).Error; err != nil {
+	if err := db.First(&movie, "movie_id = ?", input.MovieID).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid movie_id: movie not found"})
 		return
 	}
 
 	var theatre models.Theatre
-	if err := db.First(&theatre, "theatre_id = ?", show.TheatreID).Error; err != nil {
+	if err := db.First(&theatre, "theatre_id = ?", input.TheatreID).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid theatre_id: theatre not found"})
 		return
 	}
 
-	show.CreatedAt = time.Now()
-	show.UpdatedAt = time.Now()
-
-	if err := db.Create(&show).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	dateParsed, err := time.Parse("2006-01-02", input.Date)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid date format. Use YYYY-MM-DD"})
 		return
 	}
 
-	c.JSON(http.StatusCreated, show)
+	languagesJSON, err := json.Marshal(input.Languages)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid languages"})
+		return
+	}
+
+	var createdShows []models.Show
+
+	for _, t := range input.Times {
+		startTimeParsed, err := time.Parse("15:04", t.StartTime)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid start_time format. Use HH:MM"})
+			return
+		}
+		endTimeParsed, err := time.Parse("15:04", t.EndTime)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid end_time format. Use HH:MM"})
+			return
+		}
+
+		show := models.Show{
+			MovieID:   input.MovieID,
+			TheatreID: input.TheatreID,
+			Date:      dateParsed,
+			StartTime: startTimeParsed,
+			EndTime:   endTimeParsed,
+			Languages: languagesJSON,
+			CreatedAt: time.Now(),
+			UpdatedAt: time.Now(),
+		}
+
+		if err := db.Create(&show).Error; err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		createdShows = append(createdShows, show)
+	}
+
+	c.JSON(http.StatusCreated, createdShows)
 }
 
 func GetShowByID(c *gin.Context) {
@@ -85,7 +132,15 @@ func UpdateShow(c *gin.Context) {
 		return
 	}
 
-	var input models.Show
+	var input struct {
+		MovieID   int      `json:"movie_id" binding:"required"`
+		TheatreID int      `json:"theatre_id" binding:"required"`
+		Date      string   `json:"date" binding:"required"`
+		StartTime string   `json:"start_time" binding:"required"`
+		EndTime   string   `json:"end_time" binding:"required"`
+		Languages []string `json:"languages" binding:"required"`
+	}
+
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -103,12 +158,33 @@ func UpdateShow(c *gin.Context) {
 		return
 	}
 
+	dateParsed, err := time.Parse("2006-01-02", input.Date)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid date format. Use YYYY-MM-DD"})
+		return
+	}
+	startTimeParsed, err := time.Parse("15:04", input.StartTime)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid start_time format. Use HH:MM"})
+		return
+	}
+	endTimeParsed, err := time.Parse("15:04", input.EndTime)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid end_time format. Use HH:MM"})
+		return
+	}
+	languagesJSON, err := json.Marshal(input.Languages)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid languages"})
+		return
+	}
+
 	show.MovieID = input.MovieID
 	show.TheatreID = input.TheatreID
-	show.ShowTime = input.ShowTime
-	show.TotalSeats = input.TotalSeats
-	show.Price = input.Price
-	show.ShowDuration = input.ShowDuration
+	show.Date = dateParsed
+	show.StartTime = startTimeParsed
+	show.EndTime = endTimeParsed
+	show.Languages = languagesJSON
 	show.UpdatedAt = time.Now()
 
 	if err := db.Save(&show).Error; err != nil {

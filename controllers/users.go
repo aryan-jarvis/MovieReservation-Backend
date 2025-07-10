@@ -2,71 +2,92 @@ package controllers
 
 import (
 	"net/http"
+	"os"
+	"time"
 
 	"backend/models"
-	"backend/utils"
 
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
-	"gorm.io/gorm"
 )
 
-type RegisterInput struct {
-	Name     string `json:"name" binding:"required"`
-	Email    string `json:"email" binding:"required,email"`
-	Password string `json:"password" binding:"required,min=6"`
-}
+var jwtSecret = []byte(os.Getenv("JWT_SECRET"))
 
-type LoginInput struct {
-	Email    string `json:"email" binding:"required,email"`
-	Password string `json:"password" binding:"required"`
+func generateToken(userID int) (string, error) {
+	claims := jwt.MapClaims{
+		"user_id": userID,
+		"exp":     time.Now().Add(time.Hour * 72).Unix(),
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	return token.SignedString(jwtSecret)
 }
 
 func Register(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	var input struct {
+		Name     string `json:"name" binding:"required"`
+		Email    string `json:"email" binding:"required,email"`
+		Password string `json:"password" binding:"required,min=6"`
+	}
 
-	var input RegisterInput
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	var existing models.User
-	if err := db.Where("email = ?", input.Email).First(&existing).Error; err == nil {
-		c.JSON(http.StatusConflict, gin.H{"error": "Email already registered"})
+	var count int64
+	models.DB.Model(&models.User{}).Where("email = ? OR name = ?", input.Email, input.Name).Count(&count)
+	if count > 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Email or name already in use"})
 		return
 	}
 
-	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to hash password"})
+		return
+	}
 
 	user := models.User{
 		Name:         input.Name,
 		Email:        input.Email,
 		PasswordHash: string(hashedPassword),
 	}
-	if err := db.Create(&user).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+
+	if err := models.DB.Create(&user).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
 		return
 	}
 
-	token, _ := utils.GenerateJWT(uint(user.UserID))
+	token, err := generateToken(user.UserID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
+		return
+	}
 
-	c.SetCookie("token", token, 365*3600*24, "/", "", false, true)
+	c.SetCookie("token", token, 3600*24*3, "/", "", false, true)
 
-	c.JSON(http.StatusCreated, gin.H{"message": "Registration successful"})
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Registration successful",
+		"name":    user.Name,
+		"email":   user.Email,
+		"token":   token,
+	})
 }
 
 func Login(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	var input struct {
+		Email    string `json:"email" binding:"required,email"`
+		Password string `json:"password" binding:"required"`
+	}
 
-	var input LoginInput
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	var user models.User
-	if err := db.Where("email = ?", input.Email).First(&user).Error; err != nil {
+	if err := models.DB.Where("email = ?", input.Email).First(&user).Error; err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
 		return
 	}
@@ -76,9 +97,27 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	token, _ := utils.GenerateJWT(uint(user.UserID))
+	token, err := generateToken(user.UserID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
+		return
+	}
 
-	c.SetCookie("token", token, 365*3600*24, "/", "", false, true)
+	c.SetCookie("token", token, 3600*24*3, "/", "", false, true)
 
-	c.JSON(http.StatusOK, gin.H{"message": "Login successful"})
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Login successful",
+		"name":    user.Name,
+		"email":   user.Email,
+		"token":   token,
+	})
+}
+
+func Me(c *gin.Context) {
+	user, exists := c.Get("user")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+	c.JSON(http.StatusOK, user)
 }

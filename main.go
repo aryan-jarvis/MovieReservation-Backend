@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"backend/controllers"
+	"backend/middlewares"
 	"backend/models"
 )
 
@@ -16,13 +17,15 @@ func main() {
 
 	router := gin.Default()
 
+	router.POST("/api/payment/success", controllers.PaymentSuccessHandler)
+	router.POST("/api/payment/failure", controllers.PaymentFailureHandler)
+
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:5173"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
-		// MaxAge:           12 * time.Hour,
 	}))
 
 	router.Use(func(c *gin.Context) {
@@ -32,6 +35,20 @@ func main() {
 
 	router.POST("/register", controllers.Register)
 	router.POST("/login", controllers.Login)
+	router.GET("/me", middlewares.AuthMiddleware(), controllers.Me)
+	router.GET("/api/booking/:txnid", controllers.GetBookingDetails)
+
+	protected := router.Group("/api")
+	protected.Use(middlewares.AuthMiddleware())
+	{
+		protected.GET("/profile", func(c *gin.Context) {
+			user, _ := c.Get("user")
+			c.JSON(200, gin.H{"user": user})
+		})
+
+		// Payment initiation (requires authentication)
+		protected.POST("/payment/initiate", controllers.InitiatePayment)
+	}
 
 	movieRoutes := router.Group("/movies")
 	{
@@ -85,6 +102,12 @@ func main() {
 		cityRoutes.GET("/:id", controllers.GetCityByID)
 		cityRoutes.PUT("/:id", controllers.UpdateCity)
 		cityRoutes.DELETE("/:id", controllers.DeleteCity)
+	}
+
+	seatRoutes := router.Group("/seats")
+	{
+		seatRoutes.GET("/show/:id", controllers.GetBookedSeats)
+		seatRoutes.POST("/book", controllers.BookSeat)
 	}
 
 	port := os.Getenv("PORT")

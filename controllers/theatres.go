@@ -112,8 +112,9 @@ func UpdateTheatre(c *gin.Context) {
 	theatre.TheatreName = input.TheatreName
 	theatre.TheatreLocation = input.TheatreLocation
 	theatre.CityID = input.CityID
+	theatre.TheatreStatus = input.TheatreStatus
 	theatre.TotalSeats = input.TotalSeats
-	theatre.TheatreTiming = input.TheatreTiming
+	theatre.TheatreImage = input.TheatreImage
 	theatre.UpdatedAt = time.Now()
 
 	if err := db.Save(&theatre).Error; err != nil {
